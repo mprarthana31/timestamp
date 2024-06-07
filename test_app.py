@@ -3,6 +3,7 @@ import pytest
 from freezegun import freeze_time
 from datetime import datetime, timezone
 from app.main import app
+import os
 
 client = TestClient(app)
 
@@ -36,3 +37,12 @@ def test_api_invalid(a):
     assert response.status_code == 200
     received = response.json()
     assert received["error"] == "Invalid Date"
+
+def test_api_healthcheck():
+
+    os.environ["GIT_SHA"] = "1234"
+
+    response = client.get("/health")
+    assert response.status_code == 200
+    received = response.json()
+    assert received["version"] == "1234"

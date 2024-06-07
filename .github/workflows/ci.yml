@@ -27,4 +27,8 @@ jobs:
         run: pytest --cov=app
 
       - name: Docker Build
-        run: docker build --tag ts-service --file Dockerfile .
+        run: |
+          docker build \
+          --tag ts-service \
+          --build-arg GIT_SHA=${{github.sha}} \
+          --file Dockerfile .

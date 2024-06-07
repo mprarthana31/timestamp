@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import os
 
 from datetime import datetime, timezone
 
@@ -24,3 +25,9 @@ async def read_item(raw_date: str):
     unix_var = datetime.timestamp(converted_date)
 
     return {"unix": int(unix_var*1000), "utc": converted_date.strftime('%a, %d %b %Y, %H:%M:%S %Z')}
+
+@app.get("/health")
+async def health_check():
+
+    #return the current valaue of GIT_SHA
+    return {"version": os.getenv("GIT_SHA")}
