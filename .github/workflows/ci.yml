@@ -25,3 +25,6 @@ jobs:
 
       - name: Pytest
         run: pytest --cov=app
+
+      - name: Docker Build
+        run: docker build --tag ts-service --file Dockerfile .
