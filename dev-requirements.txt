@@ -3,3 +3,4 @@ fastapi-cli==0.0.4
 pydantic>=2.0.3,<3.0.0
 pytest==8.2.2
 freezegun==1.5.1
+pytest-cov==5.0.0
