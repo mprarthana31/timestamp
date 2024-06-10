@@ -7,39 +7,46 @@ import os
 
 client = TestClient(app)
 
-test_dates = ["2015-02-15", "2024-05-17", "1965-01-17"]
+test_dates = [
+    ("2015-02-15", {"unix": 1423958400000, "utc": "Sun, 15 Feb 2015, 00:00:00 UTC"}),
+    ("2024-05-17", {"unix": 1715904000000, "utc": "Fri, 17 May 2024, 00:00:00 UTC"}),
+    ("1451001600000", {"unix": 1451001600000, "utc": "Fri, 25 Dec 2015, 05:30:00 UTC"}),
+]
 invalid_dates = ["abc", "2015-14-09"]
 
-@pytest.mark.parametrize("a", test_dates)
+freeze_time_dates = ["2012-04-08", "1985-07-15"]
+
+
+@pytest.mark.parametrize("a", freeze_time_dates)
 def test_api_null(a):
     with freeze_time(a):
-        converted_date = datetime.strptime(a,'%Y-%m-%d').replace(tzinfo= timezone.utc)
+        converted_date = datetime.strptime(a, "%Y-%m-%d").replace(tzinfo=timezone.utc)
         response = client.get("/api")
         assert response.status_code == 200
         received = response.json()
-        assert received["unix"] == datetime.timestamp(converted_date)*1000
-        assert received["utc"] == converted_date.strftime('%a, %d %b %Y, %H:%M:%S %Z')
+        assert received["unix"] == datetime.timestamp(converted_date) * 1000
+        assert received["utc"] == converted_date.strftime("%a, %d %b %Y, %H:%M:%S %Z")
 
-@pytest.mark.parametrize("a", test_dates)
-def test_api_value(a):
-    
-    converted_date = datetime.strptime(a,'%Y-%m-%d').replace(tzinfo= timezone.utc)
+
+@pytest.mark.parametrize("a,b", test_dates)
+def test_api_value(a, b):
+    # converted_date = datetime.strptime(a, "%Y-%m-%d").replace(tzinfo=timezone.utc)
     response = client.get(f"/api/{a}")
     assert response.status_code == 200
     received = response.json()
-    assert received["unix"] == datetime.timestamp(converted_date)*1000
-    assert received["utc"] == converted_date.strftime('%a, %d %b %Y, %H:%M:%S %Z')
+    assert received["unix"] == b["unix"]
+    assert received["utc"] == b["utc"]
+
 
 @pytest.mark.parametrize("a", invalid_dates)
 def test_api_invalid(a):
-    
     response = client.get(f"/api/{a}")
     assert response.status_code == 200
     received = response.json()
     assert received["error"] == "Invalid Date"
 
-def test_api_healthcheck():
 
+def test_api_healthcheck():
     os.environ["GIT_SHA"] = "1234"
 
     response = client.get("/health")
