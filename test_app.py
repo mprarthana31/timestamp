@@ -8,9 +8,9 @@ import os
 client = TestClient(app)
 
 test_dates = [
-    ("2015-02-15", {"unix": 1423958400000, "utc": "Sun, 15 Feb 2015, 00:00:00 GMT"}),
-    ("2024-05-17", {"unix": 1715904000000, "utc": "Fri, 17 May 2024, 00:00:00 GMT"}),
-    ("1451001600000", {"unix": 1451001600000, "utc": "Fri, 25 Dec 2015, 00:00:00 GMT"}),
+    ("2015-02-15", {"unix": 1423958400000, "utc": "Sun, 15 Feb 2015 00:00:00 GMT"}),
+    ("2024-05-17", {"unix": 1715904000000, "utc": "Fri, 17 May 2024 00:00:00 GMT"}),
+    ("1451001600000", {"unix": 1451001600000, "utc": "Fri, 25 Dec 2015 00:00:00 GMT"}),
 ]
 invalid_dates = ["abc", "2015-14-09"]
 
@@ -25,7 +25,7 @@ def test_api_null(a):
         assert response.status_code == 200
         received = response.json()
         assert received["unix"] == datetime.timestamp(converted_date) * 1000
-        assert received["utc"] == converted_date.strftime("%a, %d %b %Y, %H:%M:%S %Z")
+        assert received["utc"] == converted_date.strftime("%a, %d %b %Y %H:%M:%S %Z")
 
 
 @pytest.mark.parametrize("a,b", test_dates)
