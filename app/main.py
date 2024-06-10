@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 import os
 
 from datetime import datetime, timezone
@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 app = FastAPI()
 
 origins = [
-    "http://freecodecamp.org",
+    "https://www.freecodecamp.org",
 ]
 
 app.add_middleware(
