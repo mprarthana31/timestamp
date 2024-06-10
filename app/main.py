@@ -36,7 +36,7 @@ async def read_item(raw_date: str):
 
     return {
         "unix": int(unix_var * 1000),
-        "utc": converted_date.strftime("%a, %d %b %Y, %H:%M:%S %Z"),
+        "utc": converted_date.strftime("%a, %d %b %Y, %H:%M:%S GMT"),
     }
 
 
