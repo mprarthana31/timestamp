@@ -23,7 +23,7 @@ async def read_item(raw_date: str):
     try:
         unix_var = int(raw_date) // 1000
         print(unix_var)
-        converted_date = datetime.fromtimestamp(unix_var).replace(tzinfo=timezone.utc)
+        converted_date = datetime.fromtimestamp(unix_var, timezone.utc)
         print(converted_date)
     except ValueError:
         try:
